@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: vq-vae-speech
+spec:
+  template:
+    spec:
+      containers:
+      - name: vqvae
+        image: tensorflow/tensorflow:1.5.0-rc1-gpu-py3
+        imagePullPolicy: Always
+        resources:
+          limits:
+            nvidia.com/gpu: "1"
+            memory: "8G"
+          requests:
+            nvidia.com/gpu: "1"
+            memory: "5G"
+        volumeMounts:
+        - mountPath: /nas0
+          name: nas0
+        workingDir: /nas0/home/jonghoon.seo/vqvae-speech
+        command: [
+          "python",
+          "wav2tfr.py",
+          "--fs=16000",
+          "--output_dir=dataset/VCTK/tfr",
+          "--speaker_list=etc/speakers.tsv",
+          "--file_pattern=dataset/VCTK/wav48/*/*.wav"
+        ]
+      volumes:
+          - hostPath:
+              path: /nas0
+            name: nas0
+      restartPolicy: Never
