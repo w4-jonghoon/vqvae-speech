@@ -6,8 +6,8 @@ spec:
   template:
     spec:
       containers:
-      - name: vqvae
-        image: tensorflow/tensorflow:1.5.0-rc1-gpu-py3
+      - name: skelter-tf1.13-speech
+        image: skelter/tensorflow-speech:1.13-gpu-ubuntu18.04
         imagePullPolicy: Always
         resources:
           limits:
@@ -33,3 +33,5 @@ spec:
               path: /nas0
             name: nas0
       restartPolicy: Never
+      imagePullSecrets:
+      - name: docker-cred
